@@ -37,8 +37,8 @@ export function dayLabel(iso: string): string {
   })();
   if (iso === today) return "Today";
   if (iso === yesterday) return "Yesterday";
-  const [y, m, d] = iso.split("-").map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString("en-IN", {
+  const parts = iso.split("-").map(Number);
+  return new Date(parts[0] ?? 1970, (parts[1] ?? 1) - 1, parts[2] ?? 1).toLocaleDateString("en-IN", {
     weekday: "short",
     day: "numeric",
     month: "short",
