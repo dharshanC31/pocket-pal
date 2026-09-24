@@ -63,5 +63,5 @@ export const CATEGORY_DOTS = [
 ];
 
 export function dotColor(index: number): string {
-  return CATEGORY_DOTS[index % CATEGORY_DOTS.length];
+  return CATEGORY_DOTS[index % CATEGORY_DOTS.length] ?? "var(--cat-6)";
 }
