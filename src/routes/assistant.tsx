@@ -18,7 +18,7 @@ export const Route = createFileRoute("/assistant")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Assistant;
+  component: Assistant,
 });
 
 const PROMPTS = [
