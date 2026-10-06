@@ -4,6 +4,8 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useNavigate,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -11,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { AuthProvider, useAuth } from "@/lib/auth";
 
 function NotFoundComponent() {
   return (
@@ -119,8 +122,34 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <AuthProvider>
+        <AuthGate>
+          {/* Required: nested routes render here. */}
+          <Outlet />
+        </AuthGate>
+      </AuthProvider>
     </QueryClientProvider>
   );
+}
+
+/** Pages (and their data requests) only mount once a session exists. */
+function AuthGate({ children }: { children: ReactNode }) {
+  const { session, loading } = useAuth();
+  const navigate = useNavigate();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isPublic = pathname === "/auth";
+
+  useEffect(() => {
+    if (!loading && !session && !isPublic) navigate({ to: "/auth" });
+  }, [loading, session, isPublic, navigate]);
+
+  if (isPublic) return <>{children}</>;
+  if (loading || !session) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p className="label-xs">Loading</p>
+      </div>
+    );
+  }
+  return <>{children}</>;
 }
