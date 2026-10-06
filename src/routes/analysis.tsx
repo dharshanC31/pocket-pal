@@ -180,7 +180,7 @@ function Analysis() {
   );
 }
 
-function Metric({ label, value, hint }: { label: string; value: string; hint?: string }) {
+function Metric({ label, value, hint }: { label: string; value: string; hint?: string | undefined }) {
   return (
     <div className="glass p-5">
       <p className="label-xs">{label}</p>
