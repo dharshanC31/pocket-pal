@@ -152,7 +152,7 @@ function Stat({
 }: {
   label: string;
   value: string;
-  hint?: string;
+  hint?: string | undefined;
   big?: boolean;
 }) {
   return (
